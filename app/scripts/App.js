@@ -1,11 +1,14 @@
 import NumberUtils from './utils/number-utils'
 import {TweenMax} from 'gsap'
+import Stats from 'stats-js'
+
 import Scene from './scene/scene'
 
 import PortalsController from './controllers/portalsController';
 import TunnelController from './controllers/tunnelController';
 
 import Cursor from './shapes/cursor';
+
 
 class App {
 
@@ -20,6 +23,16 @@ class App {
         root.appendChild( Scene.renderer.domElement );
 
         this.mouse = new THREE.Vector2(0, 0);
+
+        this.stats = new Stats();
+        this.stats.setMode(0); // 0: fps, 1: ms
+
+        // Align top-left
+        this.stats.domElement.style.position = 'absolute';
+        this.stats.domElement.style.left = '0px';
+        this.stats.domElement.style.top = '0px';
+
+        document.body.appendChild( this.stats.domElement );
 
         this.init();
         this.addListeners();
@@ -61,6 +74,9 @@ class App {
         this.DELTA_TIME = Date.now() - this.LAST_TIME;
         this.LAST_TIME = Date.now();
 
+        // START STATS
+        this.stats.begin();
+
         // CURSOR
         this.cursor.update(this.DELTA_TIME);
         let cursorBox = this.cursor.cursorBBox;
@@ -73,6 +89,9 @@ class App {
 
         // RENDER
         Scene.render()
+
+        // END STATS
+        this.stats.end();
     }
 
 

@@ -1,7 +1,7 @@
 import { colorManager } from '../utils/colorManager'
 import Scene from '../scene/scene'
 
-class Stars {
+class Dust {
 
     /**
      * @constructor
@@ -9,13 +9,13 @@ class Stars {
     constructor() {
         this.number = 120;
         this.radius = 5;
-        this.color = new THREE.Color(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
+        this.color = new THREE.Color('#FFFFFF');
         this.lines = [];
         this.render();
     }
 
     render() {
-        let geometry = new THREE.BoxGeometry( 0.05, 0.05, 5 );
+        let geometry = new THREE.BoxGeometry( 0.05, 0.05, 0.05 );
         let material = new THREE.MeshLambertMaterial({
             color: this.color,
             emissive: this.color
@@ -28,23 +28,20 @@ class Stars {
         }
     }
 
-    setPosition(line) {
-        let positionZ = Math.floor(Math.random() * 200) + 1;
+    setPosition(particle) {
+        let positionZ = Math.floor(Math.random() * 100) + 100;
         let multiplicateur = Math.floor(Math.random() * 2) === 0 ? -1 : 1;
         positionZ = positionZ * multiplicateur;
-        line.position.x = Math.cos(((Math.PI * 2) / this.number) * line.id ) * this.radius * multiplicateur;
-        line.position.y = Math.sin(((Math.PI * 2) / this.number) * line.id ) * this.radius * multiplicateur;
-        line.position.z = positionZ;
+        particle.position.x = Math.cos(((Math.PI * 2) / this.number) * particle.id ) * this.radius * multiplicateur;
+        particle.position.y = Math.sin(((Math.PI * 2) / this.number) * particle.id ) * this.radius * multiplicateur;
+        particle.position.z = positionZ;
     }
 
 
     update() {
-        this.color.set(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
 
         for(let i = 0 ; i < this.lines.length; i++){
-            this.lines[i].position.z += 1;
-            this.lines[i].material.color = this.color;
-            this.lines[i].material.emissive = this.color;
+            this.lines[i].position.z += 0.2;
 
             if (this.lines[i].position.z > 300){
                 this.lines[i].position.z = 200
@@ -53,4 +50,4 @@ class Stars {
     }
 }
 
-export default Stars
+export default Dust

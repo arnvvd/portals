@@ -8,6 +8,8 @@ class Neon {
      */
     constructor() {
         this.neonLength = 20;
+        this.neonGapX = 2.5;
+        this.neonGapY = .4;
         this.neonGroupArr = [];
         this.render();
     }
@@ -21,26 +23,26 @@ class Neon {
         // Top Right
         let neonA = new THREE.Mesh( geometry, material );
         neonA.rotation.z = Math.PI / 4;
-        neonA.position.x -= 3;
-        neonA.position.y += .4;
+        neonA.position.x -= this.neonGapX;
+        neonA.position.y += this.neonGapY;
 
         // Bottom Right
         let neonB = new THREE.Mesh( geometry, material );
         neonB.rotation.z = - Math.PI / 4;
-        neonB.position.x -= 3;
-        neonB.position.y -= .4;
+        neonB.position.x -= this.neonGapX;
+        neonB.position.y -= this.neonGapY;
 
         // Top Left
         let neonC = new THREE.Mesh( geometry, material );
         neonC.rotation.z = - Math.PI / 4;
-        neonC.position.x += 3;
-        neonC.position.y += .4;
+        neonC.position.x += this.neonGapX;
+        neonC.position.y += this.neonGapY;
 
         // Bottom Left
         let neonD = new THREE.Mesh( geometry, material );
         neonD.rotation.z = Math.PI / 4;
-        neonD.position.x += 3;
-        neonD.position.y -= .4;
+        neonD.position.x += this.neonGapX;
+        neonD.position.y -= this.neonGapY;
 
         // Group
         let neonGroup = new THREE.Group();

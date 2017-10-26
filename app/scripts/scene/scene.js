@@ -24,7 +24,7 @@ class Scene {
 
         this.renderer.setSize( this.width, this.height );
 
-        this.camera.position.z = 300;
+        this.camera.position.z = 30;
     }
 
     /**

@@ -4,8 +4,6 @@ import texture from '../../assets/textures/texture2.jpg'
 class Tunnel {
     constructor() {
         this.init();
-        this.test = 0
-        this.fasting = false
     }
 
     init() {
