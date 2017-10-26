@@ -1,3 +1,4 @@
+import { gameManager } from '../utils/gameManager';
 import Scene from '../scene/scene'
 import Portal from '../shapes/portal';
 
@@ -16,6 +17,7 @@ class PortalsController {
     addPortal() {
         let portal = new Portal();
         this.portals.push(portal);
+        gameManager.createPortal();
     }
 
 

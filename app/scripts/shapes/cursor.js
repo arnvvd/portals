@@ -2,8 +2,8 @@ import { colorManager } from '../utils/colorManager'
 import Easing from '../utils/easing'
 import Scene from '../scene/scene'
 
-import vertShader from '../shaders/tori/tori.vert'
-import fragShader from '../shaders/tori/tori.frag'
+import vertShader from '../shaders/vertShader.vert'
+import fragShader from '../shaders/fragShader.frag'
 
 
 class Cursor {

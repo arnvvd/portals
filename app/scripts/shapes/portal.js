@@ -1,8 +1,9 @@
 import { colorManager } from '../utils/colorManager'
+import { gameManager } from '../utils/gameManager'
 import Scene from '../scene/scene'
 
-import vertShader from '../shaders/tori/tori.vert'
-import fragShader from '../shaders/tori/tori.frag'
+import vertShader from '../shaders/vertShader.vert'
+import fragShader from '../shaders/fragShader.frag'
 
 class Portal {
 
@@ -71,7 +72,8 @@ class Portal {
                 THREE.UniformsLib.fog,
                 {
                     u_time: { type: "f", value: 1.0 },
-                    u_amplitude: {type: "f", value: 1.0}
+                    u_amplitude: {type: "f", value: 1.0},
+                    diffuse: { value: new THREE.Color( 0xffffff)}
                 }
             ] ),
             vertexShader: vertShader,
@@ -109,16 +111,27 @@ class Portal {
 
         // IF INTERSECTED
         if (this.portalBBox.intersectsBox(intersectBox) && !this.isTouched) {
+
+            // UPDATE STATUS
             this.isTouched = true;
             this.toriMaterial.uniforms.u_amplitude.value = 1.2;
-            console.log('done');
-            colorManager.changeCurrentColor();
+            this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0x00efe9);
 
+            // ADD POINT
+            gameManager.touchPortal();
+
+            // UPDATE COLOR
+            colorManager.changeCurrentColor();
         }
 
-        // CHANGE STATUS
+        // REMOVE PORTAL
         if (this.sphere.position.z > 300){
             this.isVisible = false;
+
+            // IF NOT INTERSECTED
+            if (!this.isTouched) {
+                gameManager.missPortal();
+            }
         }
 
     }
