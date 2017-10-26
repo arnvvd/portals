@@ -15,7 +15,6 @@ class Portal {
         this.isVisible = true;
         this.isTouched = false;
         this.particleArr = [];
-        this.particleAmplitudeArr = [];
         this.currentTime = 0;
         this.render();
 
@@ -35,8 +34,8 @@ class Portal {
         // SPHERE POSITION
         let positionX = Math.floor(Math.random() * 2) + 1;
         let positionY = Math.floor(Math.random() * 2) + 1;
-        let multiplicateurX = Math.floor(Math.random() * 2) === 0 ? -1 : 1;
-        let multiplicateurY = Math.floor(Math.random() * 2) === 0 ? -1 : 1;
+        let multiplicateurX = Math.floor(Math.random() * 2) === 0 ? -.8 : .8;
+        let multiplicateurY = Math.floor(Math.random() * 2) === 0 ? -.8 : .8;
 
         this.sphere.position.x = positionX * multiplicateurX;
         this.sphere.position.y = positionY * multiplicateurY;
@@ -57,13 +56,8 @@ class Portal {
             particle.y = (5 / 5 + 1 * Math.cos(this.alpha) / 5) * Math.sin(this.theta);
             particle.z = 1 * Math.sin(this.alpha) / 5;
 
-            let particleAmplitude = new THREE.Vector3();
-            particleAmplitude.copy(particle);
-            particleAmplitude.multiplyScalar(2);
-
             this.toriGeometry.vertices.push( particle );
             this.particleArr.push( particle );
-            this.particleAmplitudeArr.push(particleAmplitude);
         }
 
         // TORI MATERIAL
@@ -116,17 +110,10 @@ class Portal {
         // IF INTERSECTED
         if (this.portalBBox.intersectsBox(intersectBox) && !this.isTouched) {
             this.isTouched = true;
-            //this.toriMaterial.uniforms.u_amplitude.value = 1.2;
+            this.toriMaterial.uniforms.u_amplitude.value = 1.2;
             console.log('done');
             colorManager.changeCurrentColor();
 
-            this.toriGeometry.verticesNeedUpdate = true;
-
-            for(var i=0; i< this.particlesLength; i++){
-                this.particleArr[i].x += (this.particleAmplitudeArr[i].x - this.particleArr[i].x) * 0.2;
-                this.particleArr[i].y += (this.particleAmplitudeArr[i].y - this.particleArr[i].y) * 0.2;
-                this.particleArr[i].z += (this.particleAmplitudeArr[i].z - this.particleArr[i].z) * 0.2;
-            }
         }
 
         // CHANGE STATUS

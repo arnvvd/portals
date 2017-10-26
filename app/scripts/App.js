@@ -23,6 +23,11 @@ class App {
         root.appendChild( Scene.renderer.domElement );
 
         this.mouse = new THREE.Vector2(0, 0);
+        this.direction_mouse = new THREE.Vector3(0, 0, 0);
+        this.cameraPosition_mouse = new THREE.Vector3(0, 0, 0);
+        this.cameraAmplitude = 2;
+        this.cameraVelocity = 0.02;
+        this.cameraDirection = -1; // -1 = follow mouse, 1 = reverse mouse
 
         this.stats = new Stats();
         this.stats.setMode(0); // 0: fps, 1: ms
@@ -87,8 +92,17 @@ class App {
         // PORTALS CONTROLLER
         this.portalsController.update(this.DELTA_TIME, cursorBox);
 
+
+        // CAMERA
+        this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse);
+        this.direction_mouse.multiplyScalar(this.cameraVelocity);
+        this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse);
+        Scene.camera.position.x = - this.cameraPosition_mouse.x * this.cameraDirection * this.cameraAmplitude;
+        Scene.camera.position.y = - this.cameraPosition_mouse.y * this.cameraDirection * this.cameraAmplitude;
+        Scene.camera.lookAt(new THREE.Vector3(0,0,0));
+
         // RENDER
-        Scene.render()
+        Scene.render();
 
         // END STATS
         this.stats.end();

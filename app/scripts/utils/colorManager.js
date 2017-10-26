@@ -19,7 +19,7 @@ class ColorManager {
             },*/
             {
                 isActive: false,
-                color: [ ['15', '226', '229'], ['255', '255', '255'] ] // black + white
+                color: [ ['6', '51', '255'], ['255', '255', '255'] ] // black + white
             },
             /*{
                 isActive: false,
