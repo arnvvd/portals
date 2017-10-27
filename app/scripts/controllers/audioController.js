@@ -86,9 +86,6 @@ export default class AudioManager {
                 // connect the audio source to context's output
                 this.connectNodes();
 
-                // play sound
-                this.play();
-
                 // set canUpdate
                 this.canUpdate = true;
 
@@ -119,6 +116,10 @@ export default class AudioManager {
 
     play() {
         this.audioSource.start();
+    }
+
+    pause() {
+        this.audioSource.pause();
     }
 
 

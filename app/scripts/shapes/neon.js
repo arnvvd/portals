@@ -1,4 +1,5 @@
 import { colorManager } from '../utils/colorManager'
+import Easing from '../utils/easing'
 import Scene from '../scene/scene'
 
 class Neon {
@@ -11,13 +12,16 @@ class Neon {
         this.neonGapX = 2.5;
         this.neonGapY = .4;
         this.neonGroupArr = [];
+        this.neonShapesArr = [];
+
         this.render();
     }
 
     createNeonGroup() {
         let geometry = new THREE.BoxBufferGeometry( .8, .02, .02 );
         let material = new THREE.MeshBasicMaterial({
-            color: new THREE.Color('#efd233')
+            color: new THREE.Color('#efd233'),
+            transparent: true
         });
 
         // Top Right
@@ -51,10 +55,15 @@ class Neon {
         neonGroup.add( neonC );
         neonGroup.add( neonD );
 
+        // Push all neon shape
+        this.neonShapesArr.push(neonA, neonB, neonC, neonD);
 
         // Push to Array
         this.neonGroupArr.push(neonGroup);
     }
+
+
+
 
     render() {
         let steps = 100 / this.neonLength;
@@ -76,7 +85,18 @@ class Neon {
         }
     }
 
-    update() {
+
+    updateLight(opacity) {
+        let opacityValue = opacity/ 120;
+        this.neonShapesArr.forEach((neon) => {
+            neon.material.opacity = opacityValue;
+            //console.log(neon.material.opacity);
+
+        })
+    }
+
+
+    update(audioAverage) {
         for(let i = 0 ; i < this.neonGroupArr.length; i++){
             this.neonGroupArr[i].position.z += .4;
 
@@ -85,6 +105,8 @@ class Neon {
                 this.neonGroupArr[i].position.z = 200
             }
         }
+
+        this.updateLight(audioAverage);
     }
 }
 

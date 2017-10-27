@@ -11,6 +11,7 @@ class Door {
         this.neonGapX = 8;
         this.neonGapY = 0;
         this.neonGroupArr = [];
+        this.neonShapesArr = [];
         this.render();
     }
 
@@ -18,6 +19,7 @@ class Door {
         let geometry = new THREE.BoxBufferGeometry( 4, .02, 1 );
         let geometry2 = new THREE.BoxBufferGeometry( 6, .02, 1 );
         let material = new THREE.MeshLambertMaterial({
+            transparent: true,
             color: new THREE.Color('#35192a'),
             emissive: new THREE.Color('#00efe9')
         });
@@ -53,6 +55,8 @@ class Door {
         neonGroup.add( neonC );
         neonGroup.add( neonD );
 
+        // Push all neon shape
+        this.neonShapesArr.push(neonA, neonB, neonC, neonD);
 
         // Push to Array
         this.neonGroupArr.push(neonGroup);
@@ -79,15 +83,26 @@ class Door {
         }
     }
 
-    update() {
+
+    updateLight(opacity) {
+            let opacityValue = opacity/ 120;
+        this.neonShapesArr.forEach((neon) => {
+            neon.material.opacity = opacityValue;
+        })
+    }
+
+
+
+    update(audioAverage) {
         for(let i = 0 ; i < this.neonGroupArr.length; i++){
             this.neonGroupArr[i].position.z += .8;
 
             if (this.neonGroupArr[i].position.z > 300){
-                //this.setPosition(this.neonGroupArr[i]);
                 this.neonGroupArr[i].position.z = 200
             }
         }
+
+        this.updateLight(audioAverage)
     }
 }
 

@@ -17,6 +17,7 @@ class Stars {
     render() {
         let geometry = new THREE.BoxGeometry( 0.05, 0.05, 5 );
         let material = new THREE.MeshLambertMaterial({
+            transparent: true,
             color: this.color,
             emissive: this.color
         });
@@ -38,7 +39,17 @@ class Stars {
     }
 
 
-    update() {
+    updateLight(opacity) {
+        let opacityValue = opacity/ 120;
+        this.lines.forEach((line) => {
+            line.material.opacity = opacityValue;
+            //console.log(neon.material.opacity);
+
+        })
+    }
+
+
+    update(audioAverage) {
         this.color.set(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
 
         for(let i = 0 ; i < this.lines.length; i++){
@@ -50,6 +61,8 @@ class Stars {
                 this.lines[i].position.z = 200
             }
         }
+
+        this.updateLight(audioAverage)
     }
 }
 

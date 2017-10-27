@@ -17,7 +17,7 @@ class GameManager {
         this.boost = false;
 
         // Debug
-        this.debugActive = false;
+        this.debugActive = true;
     }
 
 

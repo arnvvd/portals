@@ -25,13 +25,13 @@ class TunnelController {
         this.door = new Door();
     }
 
-    update(time) {
+    update(audioAverage) {
         // LINES
-        this.stars.update();
+        this.stars.update(audioAverage);
         this.tunnel.update();
-        this.neon.update();
+        this.neon.update(audioAverage);
         this.dust.update();
-        this.door.update();
+        this.door.update(audioAverage);
     }
 }
 

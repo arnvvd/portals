@@ -89,9 +89,11 @@ class App {
             this.mouse.x = (event.clientX / this.width - .5) * 2;
             this.mouse.y = -(event.clientY / this.height - .5) * 2;
         });
+
         window.addEventListener('click', () => {
-            this.portalsController.addPortal();
+            this.audioManager.play();
         });
+
         TweenMax.ticker.addEventListener( 'tick', this.update.bind(this) )
 
     }
@@ -108,15 +110,6 @@ class App {
         // START STATS
         this.stats.begin();
 
-        // CURSOR
-        this.cursor.update(this.DELTA_TIME);
-        let cursorBox = this.cursor.cursorBBox;
-
-        // TUNNEL CONTROLLER
-        this.tunnelController.update(this.DELTA_TIME);
-
-        // PORTALS CONTROLLER
-        this.portalsController.update(this.DELTA_TIME, cursorBox);
 
         // AUDIO MANAGER
         if (this.audioManager.canUpdate) {
@@ -130,7 +123,7 @@ class App {
                 this.audioManager.kickParams,
                 () => {
                     this.portalsController.addPortal();
-                    console.log("boom");
+                    //console.log("boom");
                 }
             );
 
@@ -143,6 +136,19 @@ class App {
                 }
             );
         }
+
+
+        // CURSOR
+        this.cursor.update(this.DELTA_TIME);
+        let cursorBox = this.cursor.cursorBBox;
+
+        // TUNNEL CONTROLLER
+        this.tunnelController.update(this.audioManager.defaultAverage);
+
+        // PORTALS CONTROLLER
+        this.portalsController.update(this.DELTA_TIME, cursorBox);
+
+
 
         // CAMERA
         this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse);

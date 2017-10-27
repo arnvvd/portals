@@ -29,7 +29,7 @@ class Dust {
     }
 
     setPosition(particle) {
-        let positionZ = Math.floor(Math.random() * 100) + 100;
+        let positionZ = Math.floor(Math.random() * 100) + 200;
         let multiplicateur = Math.floor(Math.random() * 2) === 0 ? -1 : 1;
         positionZ = positionZ * multiplicateur;
         particle.position.x = Math.cos(((Math.PI * 2) / this.number) * particle.id ) * this.radius * multiplicateur;
