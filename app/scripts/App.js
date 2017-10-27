@@ -1,9 +1,13 @@
-import NumberUtils from './utils/number-utils'
 import {TweenMax} from 'gsap'
 import Stats from 'stats-js'
 
+/* IMPORT ASSETS */
+import audio from '../assets/sound/kav.mp3'
+
+/* IMPORT CLASSES */
 import Scene from './scene/scene'
 
+import AudioController from './controllers/audioController'
 import PortalsController from './controllers/portalsController';
 import TunnelController from './controllers/tunnelController';
 
@@ -40,6 +44,7 @@ class App {
         document.body.appendChild( this.stats.domElement );
 
         this.init();
+        this.initAudio();
         this.addListeners();
     }
 
@@ -50,6 +55,27 @@ class App {
         this.cursor = new Cursor(this.mouse);
         this.tunnelController = new TunnelController();
         this.portalsController = new PortalsController();
+    }
+
+    /**
+     * initAudio
+     */
+    initAudio() {
+        this.audioManager = new AudioController({
+            audioSrc: audio,
+            kickParams: {
+                timestamp: 0,
+                averageThresold: 250,
+                timeThresold: 250,
+                isPlaying: false
+            },
+            snareParams: {
+                timestamp: 0,
+                averageThresold: 115,
+                timeThresold: 100,
+                isPlaying: false
+            }
+        })
     }
 
 
@@ -92,6 +118,31 @@ class App {
         // PORTALS CONTROLLER
         this.portalsController.update(this.DELTA_TIME, cursorBox);
 
+        // AUDIO MANAGER
+        if (this.audioManager.canUpdate) {
+
+            // Update
+            this.audioManager.update();
+
+            // On Kick
+            this.getAudioEvent(
+                this.audioManager.kickAverage,
+                this.audioManager.kickParams,
+                () => {
+                    this.portalsController.addPortal();
+                    console.log("boom");
+                }
+            );
+
+            // On Snare
+            this.getAudioEvent(
+                this.audioManager.snareAverage,
+                this.audioManager.snareParams,
+                () => {
+
+                }
+            );
+        }
 
         // CAMERA
         this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse);
@@ -108,6 +159,26 @@ class App {
         this.stats.end();
     }
 
+
+    getAudioEvent(average, params, callback) {
+
+        if (average > params.averageThresold){
+
+            if (params.isPlaying) {
+                params.timestamp += this.DELTA_TIME;
+
+                if(params.timestamp > params.timeThresold) {
+                    params.timestamp = 0;
+                    params.isPlaying = false;
+                }
+            }
+
+            if (!params.isPlaying) {
+                callback();
+                params.isPlaying = true;
+            }
+        }
+    }
 
 
     /**

@@ -54,9 +54,6 @@ class Neon {
 
         // Push to Array
         this.neonGroupArr.push(neonGroup);
-
-        //console.log(this.neonGroupArr);
-
     }
 
     render() {
@@ -67,7 +64,6 @@ class Neon {
             // Prepare Position
             let positionZ = currentPositionStep + steps;
             currentPositionStep = positionZ;
-            console.log(currentPositionStep);
 
             // Create group
             this.createNeonGroup();

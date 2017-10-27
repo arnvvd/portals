@@ -10,7 +10,6 @@ class PortalsController {
      */
     constructor() {
         this.portals = [];
-        this.addPortal();
     }
 
 

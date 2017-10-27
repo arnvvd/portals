@@ -11,8 +11,6 @@ class TunnelController {
      * @constructor
      */
     constructor() {
-        this.tunnelElements = [];
-
         this.init();
     }
 

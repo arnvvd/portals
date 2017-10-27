@@ -73,7 +73,7 @@ class Portal {
                 {
                     u_time: { type: "f", value: 1.0 },
                     u_amplitude: {type: "f", value: 1.0},
-                    diffuse: { value: new THREE.Color( 0xffffff)}
+                    diffuse: { value: new THREE.Color( 0x00efe9)}
                 }
             ] ),
             vertexShader: vertShader,
@@ -115,7 +115,7 @@ class Portal {
             // UPDATE STATUS
             this.isTouched = true;
             this.toriMaterial.uniforms.u_amplitude.value = 1.2;
-            this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0x00efe9);
+            this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0xa3fffc);
 
             // ADD POINT
             gameManager.touchPortal();

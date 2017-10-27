@@ -67,7 +67,6 @@ class Door {
             // Prepare Position
             let positionZ = currentPositionStep + steps;
             currentPositionStep = positionZ;
-            console.log(currentPositionStep);
 
             // Create group
             this.createNeonGroup();
@@ -77,7 +76,6 @@ class Door {
 
             // Add to Scene
             Scene.add( this.neonGroupArr[i] );
-            console.log(this.neonGroupArr[i])
         }
     }
 
