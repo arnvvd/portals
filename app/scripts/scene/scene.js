@@ -1,5 +1,6 @@
 import { colorManager } from '../utils/colorManager'
 import OrbitControls from 'imports-loader?THREE=three!exports-loader?THREE.OrbitControls!three/examples/js/controls/OrbitControls' // eslint-disable-line
+
 import EffectComposer from 'imports-loader?THREE=three!exports-loader?THREE.EffectComposer!three/examples/js/postprocessing/EffectComposer' // eslint-disable-line
 import RenderPass from 'imports-loader?THREE=three!exports-loader?THREE.RenderPass!three/examples/js/postprocessing/RenderPass' // eslint-disable-line
 import MaskPass from 'imports-loader?THREE=three!exports-loader?THREE.MaskPass!three/examples/js/postprocessing/MaskPass' // eslint-disable-line
@@ -35,6 +36,8 @@ class Scene {
         this.renderer.setSize( this.width, this.height );
 
         //this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+
+        this.raycaster = new THREE.Raycaster();
 
         this.camera.position.z = 300;
 
@@ -91,6 +94,7 @@ class Scene {
     render() {
         //let color = new THREE.Color(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
         let color = new THREE.Color('#35192a');
+        // For rendering
         this.renderer.render( this.scene, this.camera );
         this.renderer.setClearColor(color, 1);
 

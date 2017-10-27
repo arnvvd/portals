@@ -77,7 +77,7 @@ module.exports = function(env) {
                     use: 'css-loader'
                 })
             },{
-                test: [/\.mp3$/, /\.dae$/, /\.jpg$/, /\.obj$/, /\.fbx$/],
+                test: [/\.mp3$/, /\.dae$/, /\.jpg$/, /\.obj$/, /\.fbx$/, /\.woff$/],
                 use: ['file-loader?name=[path][name].[hash].[ext]']
             },
             {

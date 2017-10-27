@@ -10,11 +10,16 @@ class GameManager {
         this.portalsCreated = 0;
         this.portalsTouched = 0;
         this.portalsSequence = 0;
+        this.portalsSequenceMax = 0;
         this.portalsMissed = 0;
 
         // Boost
         this.boostReady = false;
         this.boost = false;
+
+        // UI
+        this.scoreUI = document.querySelector('.score--value');
+        this.scoreSequenceUI = document.querySelector('.score--serie');
 
         // Debug
         this.debugActive = true;
@@ -52,12 +57,19 @@ class GameManager {
         if (this.debugActive) {
             this.debug();
         }
+
+        this.updateUIScore();
     }
 
 
 
     missPortal() {
         this.portalsMissed++;
+
+        if (this.portalsSequence > this.portalsSequenceMax) {
+            this.portalsSequenceMax = this.portalsSequence
+        }
+
         this.portalsSequence = 0;
 
         if (this.score > 0) {
@@ -68,6 +80,8 @@ class GameManager {
         if (this.debugActive) {
             this.debug();
         }
+
+        this.updateUIScore();
     }
 
 
@@ -79,9 +93,18 @@ class GameManager {
         }, 3000)
     }
 
+
+
     levelUp() {
         this.level++;
     }
+
+
+    updateUIScore() {
+        this.scoreUI.innerHTML = this.score;
+        this.scoreSequenceUI.innerHTML = this.portalsSequenceMax;
+    }
+
 
 
     debug() {

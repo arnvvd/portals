@@ -1,8 +1,76 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Oswald');
+
 html, body {
     margin: 0;
     padding: 0;
 
-    background: #000;
+    background: #FFFFFF;
+    color: #FFFFFF;
 
-    font-family: sans-serif;
+
+    font-family: "Oswald";
+    font-size: 20px;
+    font-weight: 100;
+}
+
+
+.title {
+    font-family: "Orbitron";
+    font-weight: 700;
+    font-size: 120px;
+    line-height: 0;
+    color: #FFFFFF;
+}
+
+.wrapper{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    display: table;
+    width: 100%;
+    height: 100%;
+    max-width: 1280px;
+    text-align: center;
+    margin: 0 auto;
+
+    transform: translate(-50%, -50% );
+}
+
+
+.wrapper .wrapper--inner {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 4rem;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity .3s ease-in;
+}
+
+.is-active .wrapper--inner {
+    opacity: 1;
+    transition: opacity .3s ease-in;
+}
+
+.btn {
+    position: absolute;
+    bottom: 20vh;
+    left: 50%;
+    color: #FFFFFF;
+    border: 0;
+    font-family: "Oswald";
+    font-size: 20px;
+    font-weight: 100;
+    background: none;
+    transform: translateX(-50%);
+
+}
+
+
+.score {
+    position: absolute;
+    right: 4rem;
+    top: 4rem;
+    text-align: right;
+    font-size: 20px;
 }

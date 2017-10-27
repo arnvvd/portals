@@ -6,6 +6,7 @@ import audio from '../assets/sound/kav.mp3'
 
 /* IMPORT CLASSES */
 import Scene from './scene/scene'
+import UI from './ui/ui'
 
 import AudioController from './controllers/audioController'
 import PortalsController from './controllers/portalsController';
@@ -23,7 +24,7 @@ class App {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
-        let root = document.body.querySelector( '#main' );
+        let root = document.body.querySelector( '.experiment' );
         root.appendChild( Scene.renderer.domElement );
 
         this.mouse = new THREE.Vector2(0, 0);
@@ -55,6 +56,7 @@ class App {
         this.cursor = new Cursor(this.mouse);
         this.tunnelController = new TunnelController();
         this.portalsController = new PortalsController();
+        this.ui = new UI();
     }
 
     /**
@@ -92,6 +94,7 @@ class App {
 
         window.addEventListener('click', () => {
             this.audioManager.play();
+            this.ui.hideIntroduction();
         });
 
         TweenMax.ticker.addEventListener( 'tick', this.update.bind(this) )
@@ -139,7 +142,7 @@ class App {
 
 
         // CURSOR
-        this.cursor.update(this.DELTA_TIME);
+        this.cursor.update(this.mouse, this.DELTA_TIME);
         let cursorBox = this.cursor.cursorBBox;
 
         // TUNNEL CONTROLLER
@@ -147,8 +150,6 @@ class App {
 
         // PORTALS CONTROLLER
         this.portalsController.update(this.DELTA_TIME, cursorBox);
-
-
 
         // CAMERA
         this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse);
@@ -194,11 +195,10 @@ class App {
      */
     onResize( evt ) {
 
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-
-        this.scene.resize( this.width, this.height );
-    }
+        Scene.camera.aspect = window.innerWidth / window.innerHeight;
+        Scene.camera.updateProjectionMatrix();
+        Scene.renderer.setSize( window.innerWidth, window.innerHeight );
+     }
 
 
 }

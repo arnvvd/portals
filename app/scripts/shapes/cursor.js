@@ -117,14 +117,15 @@ class Cursor {
     }
 
 
-    updateCursorPosition(currentTime) {
+    updateCursorPosition(mouse, currentTime) {
 
         // FOLLOW MOUSE
-        let vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0);
+        let vector = new THREE.Vector3(mouse.x, mouse.y, 0);
         vector.unproject( Scene.camera );
         let dir = vector.sub( Scene.camera.position ).normalize();
         let distance = - (Scene.camera.position.z - this.positionZ) / dir.z;
         let pos = Scene.camera.position.clone().add( dir.multiplyScalar( distance ) );
+
 
         // EASING FOLLOW MOUSE
         this.cursor.position.z = this.positionZ;
@@ -141,7 +142,7 @@ class Cursor {
     }
 
 
-    update(currentTime) {
+    update(mouse, currentTime) {
 
         // TIME
         this.currentTime += currentTime / 500;
@@ -157,7 +158,7 @@ class Cursor {
         this.sphere.position.copy(this.cursor.position);
 
         // UPDATE CURSOR
-        this.updateCursorPosition(currentTime);
+        this.updateCursorPosition(mouse, currentTime);
 
         // UPDATE COLOR
         this.color.setRGB(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
