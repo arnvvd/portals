@@ -24,7 +24,6 @@ class PortalsController {
 
     removePortal() {
         this.portals = this.portals.slice(1, this.portals.length);
-        console.log(Scene.scene.children)
     }
 
 

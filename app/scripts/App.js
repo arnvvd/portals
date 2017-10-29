@@ -96,8 +96,9 @@ class App {
 
         window.addEventListener( 'resize', this.onResize.bind(this) );
         window.addEventListener( 'mousemove', (e) => {
-            this.mouse.x = (e.clientX / this.width - .5) * 2;
-            this.mouse.y = -(e.clientY / this.height - .5) * 2;
+            e.preventDefault();
+            this.mouse.x = (event.clientX / this.width) * 2 - 1;
+            this.mouse.y = -(event.clientY / this.height) * 2 + 1;
         });
 
         this.ui.startBtn.addEventListener('click', () => {
@@ -200,11 +201,12 @@ class App {
      * @param  {obj} evt
      */
     onResize( evt ) {
-
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
         Scene.camera.aspect = window.innerWidth / window.innerHeight;
         Scene.camera.updateProjectionMatrix();
         Scene.renderer.setSize( window.innerWidth, window.innerHeight );
-     }
+    }
 
 
 }

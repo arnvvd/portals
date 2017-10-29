@@ -102,14 +102,6 @@ class Cursor {
         let pointLightHelper = new THREE.PointLightHelper(this.light, .3);
 
 
-
-        // BOX HELPER
-        /*var object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( 0xff0000 ) );
-        this.box = new THREE.BoxHelper( object, 0xffff00 );
-        this.box.setFromObject(this.cursor);
-        Scene.add( this.box );*/
-
-
         Scene.add(this.cursor);
         Scene.add(this.sphere);
         Scene.add(this.light);
