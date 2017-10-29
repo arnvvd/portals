@@ -10,22 +10,29 @@ class Portal {
     /**
      * @constructor
      */
-    constructor() {
+    constructor(boost) {
         this.radius = .8;
         this.particlesLength = 1000;
         this.isVisible = true;
         this.isTouched = false;
         this.particleArr = [];
         this.currentTime = 0;
-        this.render();
+        this.boost = boost;
 
+        if (boost) {
+            this.color = new THREE.Color( 0xc70f5f)
+        } else {
+            this.color = new THREE.Color( 0x00efe9)
+        }
+
+        this.render();
     }
 
 
     render() {
 
         // SPHERE
-        let sphereGeometry = new THREE.SphereGeometry( this.radius, 32, 32 );
+        let sphereGeometry = new THREE.SphereGeometry( this.radius, 4, 4 );
         let sphereMaterial = new THREE.MeshBasicMaterial( {
             transparent: true,
             opacity: 0
@@ -73,7 +80,7 @@ class Portal {
                 {
                     u_time: { type: "f", value: 1.0 },
                     u_amplitude: {type: "f", value: 1.0},
-                    diffuse: { value: new THREE.Color( 0x00efe9)}
+                    diffuse: { value: this.color}
                 }
             ] ),
             vertexShader: vertShader,
@@ -96,7 +103,7 @@ class Portal {
     }
 
 
-    update(time, intersectBox) {
+    update(time, intersectBox, scale) {
 
         // TIME
         this.currentTime += time / 1000;
@@ -109,16 +116,22 @@ class Portal {
         // UPDATE BOX
         this.portalBBox.setFromObject(this.sphere);
 
+        // UPDATE SCALE
+        this.sphere.scale.x = scale;
+        this.sphere.scale.y = scale;
+        this.sphere.scale.z = scale;
+        this.toriMaterial.uniforms.u_amplitude.value = scale;
+
         // IF INTERSECTED
         if (this.portalBBox.intersectsBox(intersectBox) && !this.isTouched) {
 
             // UPDATE STATUS
             this.isTouched = true;
-            this.toriMaterial.uniforms.u_amplitude.value = 1.2;
+            this.toriMaterial.uniforms.u_amplitude.value = 1.2 * scale;
             this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0xa3fffc);
 
             // ADD POINT
-            gameManager.touchPortal();
+            gameManager.touchPortal(this.boost);
 
             // UPDATE COLOR
             colorManager.changeCurrentColor();

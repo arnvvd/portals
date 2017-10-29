@@ -7,7 +7,7 @@ class Stars {
      * @constructor
      */
     constructor() {
-        this.number = 120;
+        this.number = 100;
         this.radius = 5;
         this.color = new THREE.Color(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
         this.lines = [];
@@ -49,11 +49,17 @@ class Stars {
     }
 
 
-    update(audioAverage) {
+    update(boost, audioAverage) {
         this.color.set(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
 
+        let velocity = 1;
+
+        if (boost) {
+            velocity = velocity * 1.5;
+        }
+
         for(let i = 0 ; i < this.lines.length; i++){
-            this.lines[i].position.z += 1;
+            this.lines[i].position.z += velocity;
             this.lines[i].material.color = this.color;
             this.lines[i].material.emissive = this.color;
 

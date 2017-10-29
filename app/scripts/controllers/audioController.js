@@ -1,4 +1,5 @@
 import ArrayUtils from '../utils/array-utils'
+import {Ui} from '../ui/ui'
 
 export default class AudioManager {
 
@@ -47,7 +48,6 @@ export default class AudioManager {
         this.kickFilter.gain.value = 20;
 
         this.kickFrequencyData = new Uint8Array(this.kickAnalyser.frequencyBinCount);
-
     }
 
 
@@ -86,8 +86,14 @@ export default class AudioManager {
                 // connect the audio source to context's output
                 this.connectNodes();
 
+                // Show button
+                Ui.removeLoading();
+
                 // set canUpdate
                 this.canUpdate = true;
+
+                // Bind Event
+                this.bindEvent();
 
             }, () => {
 
@@ -118,24 +124,11 @@ export default class AudioManager {
         this.audioSource.start();
     }
 
-    pause() {
-        this.audioSource.pause();
+    bindEvent() {
+        this.audioSource.onended = () => {
+            Ui.hideScore();
+        };
     }
-
-
-    // IN THE FUTURE
-    // connectSnareFilter() {
-    //     this.snareFilter.connect(this.audioCtx.destination);
-    // }
-    // deconnectSnareFilterr() {
-    //     this.analyser.disconnect(this.audioCtx.destination);
-    // }
-    // connectAnalyser() {
-    //     this.analyser.connect(this.audioCtx.destination);
-    // }
-    // deconnectAnalyser() {
-    //     this.analyser.disconnect(this.audioCtx.destination);
-    // }
 
 
     getAverage(analyser, frequencyData) {

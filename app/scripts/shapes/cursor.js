@@ -29,7 +29,7 @@ class Cursor {
     render() {
 
         // CURSOR
-        let geometry = new THREE.SphereGeometry( this.radius, 32, 32 );
+        let geometry = new THREE.SphereGeometry( this.radius, 4, 4 );
         let material = new THREE.MeshBasicMaterial( {
             transparent: true,
             opacity: 0
@@ -42,7 +42,7 @@ class Cursor {
 
 
         // PARTICULE CURSOR
-        let particleCursorGeometry = new THREE.SphereGeometry( this.sphereCursorRadius, 32, 32 );
+        let particleCursorGeometry = new THREE.SphereGeometry( this.sphereCursorRadius, 6, 6 );
         let particleCursorMaterial = new THREE.MeshLambertMaterial({
             color: 0x222222,
             emissive: 0xFFFFFF

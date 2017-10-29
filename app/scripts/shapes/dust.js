@@ -38,10 +38,15 @@ class Dust {
     }
 
 
-    update() {
+    update(boost) {
+        let velocity = .2;
+
+        if (boost) {
+            velocity = velocity * 1.5;
+        }
 
         for(let i = 0 ; i < this.lines.length; i++){
-            this.lines[i].position.z += 0.2;
+            this.lines[i].position.z += velocity;
 
             if (this.lines[i].position.z > 300){
                 this.lines[i].position.z = 200

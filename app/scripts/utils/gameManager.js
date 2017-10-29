@@ -7,51 +7,51 @@ class GameManager {
         this.level = 0;
 
         // Portals
-        this.portalsCreated = 0;
         this.portalsTouched = 0;
         this.portalsSequence = 0;
-        this.portalsSequenceMax = 0;
         this.portalsMissed = 0;
 
         // Boost
         this.boostReady = false;
         this.boost = false;
 
-        // UI
-        this.scoreUI = document.querySelector('.score--value');
-        this.scoreSequenceUI = document.querySelector('.score--serie');
-
         // Debug
-        this.debugActive = true;
+        this.debugActive = false;
+
+        this.bindUI();
     }
 
+    bindUI() {
+        this.ui = {};
+        this.ui.score = document.querySelector('.score-data');
+        this.ui.boost = document.querySelector('.boost-data');
+        this.ui.level = document.querySelector('.level-data');
+        this.ui.crossed = document.querySelector('.crossed-data');
+    }
 
+    touchPortal(boost) {
+        this.portalsTouched++;
 
-    createPortal() {
-        this.portalsCreated++;
-
-        if (this.portalsSequence % 20 === 0 && this.portalsSequence > 0) {
-            this.boostReady = true;
-        } else {
-            this.boostReady = false;
+        // Incremente
+        if (!this.boostReady && !this.boost) {
+            this.portalsSequence++;
         }
 
-    }
-
-
-
-    touchPortal() {
-        this.portalsTouched++;
-        this.portalsSequence++;
-
-        if (this.boostReady) {
+        // If portal is a boost portal
+        if (boost) {
             this.score += 200;
             this.lastScore = "+200";
             this.playBoost();
-            this.boostReady = false;
         } else {
             this.score += 10;
             this.lastScore = "+10";
+        }
+
+        // if sequence = 20
+        if (this.portalsSequence === 20) {
+            this.boostReady = true;
+        } else {
+            this.boostReady = false;
         }
 
         if (this.debugActive) {
@@ -59,6 +59,7 @@ class GameManager {
         }
 
         this.updateUIScore();
+        this.updateLevel();
     }
 
 
@@ -66,11 +67,8 @@ class GameManager {
     missPortal() {
         this.portalsMissed++;
 
-        if (this.portalsSequence > this.portalsSequenceMax) {
-            this.portalsSequenceMax = this.portalsSequence
-        }
-
         this.portalsSequence = 0;
+        this.boostReady = false;
 
         if (this.score > 0) {
             this.score -= 10;
@@ -87,22 +85,36 @@ class GameManager {
 
 
     playBoost() {
+        this.boostReady = false;
         this.boost = true;
         setTimeout(() => {
             this.boost = false;
+            this.portalsSequence = 0;
         }, 3000)
     }
 
 
 
-    levelUp() {
-        this.level++;
+    updateLevel() {
+        if (this.portalsTouched > 350) {
+            this.level = 5;
+        } else if (this.portalsTouched > 250) {
+            this.level = 4;
+        } else if (this.portalsTouched > 175) {
+            this.level = 3;
+        } else if (this.portalsTouched > 100) {
+            this.level = 2;
+        } else if (this.portalsTouched > 50) {
+            this.level = 1;
+        }
     }
 
 
     updateUIScore() {
-        this.scoreUI.innerHTML = this.score;
-        this.scoreSequenceUI.innerHTML = this.portalsSequenceMax;
+        this.ui.score.innerHTML = this.score;
+        this.ui.boost.innerHTML = 20 - this.portalsSequence >= 0 ? 20 - this.portalsSequence : 0;
+        this.ui.crossed.innerHTML = this.portalsTouched;
+        this.ui.level.innerHTML = this.level;
     }
 
 
@@ -111,14 +123,11 @@ class GameManager {
         console.log(" ----------------------------- ");
         console.log("Score: " + this.score);
         console.log("Last Score: " + this.lastScore);
-        console.log("portalsCreated: " + this.portalsCreated);
         console.log("portalsTouched: " + this.portalsTouched);
-        console.log("portalsSequence: " + this.portalsSequence);
         console.log("portalsMissed: " + this.portalsMissed);
         console.log("boostReady: " + this.boostReady);
         console.log("boost: " + this.boost);
         console.log(" ----------------------------- ");
-
     }
 
 }

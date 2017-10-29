@@ -6,7 +6,7 @@ import audio from '../assets/sound/kav.mp3'
 
 /* IMPORT CLASSES */
 import Scene from './scene/scene'
-import UI from './ui/ui'
+import {Ui} from './ui/ui'
 
 import AudioController from './controllers/audioController'
 import PortalsController from './controllers/portalsController';
@@ -24,8 +24,8 @@ class App {
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
-        let root = document.body.querySelector( '.experiment' );
-        root.appendChild( Scene.renderer.domElement );
+        this.root = document.body.querySelector( '.experiment' );
+        this.root.appendChild( Scene.renderer.domElement );
 
         this.mouse = new THREE.Vector2(0, 0);
         this.direction_mouse = new THREE.Vector3(0, 0, 0);
@@ -45,8 +45,9 @@ class App {
         document.body.appendChild( this.stats.domElement );
 
         this.init();
+        this.bindUI();
         this.initAudio();
-        this.addListeners();
+        this.bindEvents();
     }
 
     /**
@@ -56,7 +57,14 @@ class App {
         this.cursor = new Cursor(this.mouse);
         this.tunnelController = new TunnelController();
         this.portalsController = new PortalsController();
-        this.ui = new UI();
+    }
+
+    /**
+     * UI
+     */
+    bindUI() {
+        this.ui = {};
+        this.ui.startBtn = document.querySelector('.btn--start');
     }
 
     /**
@@ -67,7 +75,7 @@ class App {
             audioSrc: audio,
             kickParams: {
                 timestamp: 0,
-                averageThresold: 250,
+                averageThresold: 252,
                 timeThresold: 250,
                 isPlaying: false
             },
@@ -82,23 +90,22 @@ class App {
 
 
     /**
-     * addListeners
+     * bindEvents
      */
-    addListeners() {
+    bindEvents() {
 
         window.addEventListener( 'resize', this.onResize.bind(this) );
-        window.addEventListener( 'mousemove', () => {
-            this.mouse.x = (event.clientX / this.width - .5) * 2;
-            this.mouse.y = -(event.clientY / this.height - .5) * 2;
+        window.addEventListener( 'mousemove', (e) => {
+            this.mouse.x = (e.clientX / this.width - .5) * 2;
+            this.mouse.y = -(e.clientY / this.height - .5) * 2;
         });
 
-        window.addEventListener('click', () => {
+        this.ui.startBtn.addEventListener('click', () => {
             this.audioManager.play();
-            this.ui.hideIntroduction();
+            Ui.hideIntroduction();
         });
 
         TweenMax.ticker.addEventListener( 'tick', this.update.bind(this) )
-
     }
 
 
@@ -112,7 +119,6 @@ class App {
 
         // START STATS
         this.stats.begin();
-
 
         // AUDIO MANAGER
         if (this.audioManager.canUpdate) {

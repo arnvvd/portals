@@ -93,9 +93,15 @@ class Door {
 
 
 
-    update(audioAverage) {
+    update(boost, audioAverage) {
+        let velocity = .8;
+
+        if (boost) {
+            velocity = velocity * 1.5;
+        }
+
         for(let i = 0 ; i < this.neonGroupArr.length; i++){
-            this.neonGroupArr[i].position.z += .8;
+            this.neonGroupArr[i].position.z += velocity;
 
             if (this.neonGroupArr[i].position.z > 300){
                 this.neonGroupArr[i].position.z = 200

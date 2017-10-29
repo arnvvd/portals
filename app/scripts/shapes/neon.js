@@ -91,14 +91,19 @@ class Neon {
         this.neonShapesArr.forEach((neon) => {
             neon.material.opacity = opacityValue;
             //console.log(neon.material.opacity);
-
         })
     }
 
 
-    update(audioAverage) {
+    update(boost, audioAverage) {
+        let velocity = .4;
+
+        if (boost) {
+            velocity = velocity * 1.5;
+        }
+
         for(let i = 0 ; i < this.neonGroupArr.length; i++){
-            this.neonGroupArr[i].position.z += .4;
+            this.neonGroupArr[i].position.z += velocity;
 
             if (this.neonGroupArr[i].position.z > 300){
                 //this.setPosition(this.neonGroupArr[i]);

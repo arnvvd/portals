@@ -1,4 +1,4 @@
-import Scene from '../scene/scene'
+import { gameManager } from '../utils/gameManager';
 import Stars from '../shapes/stars';
 import Dust from '../shapes/dust';
 import Tunnel from '../shapes/tunnel';
@@ -26,12 +26,13 @@ class TunnelController {
     }
 
     update(audioAverage) {
+        this.boost = gameManager.boost;
         // LINES
-        this.stars.update(audioAverage);
-        this.tunnel.update();
-        this.neon.update(audioAverage);
-        this.dust.update();
-        this.door.update(audioAverage);
+        this.stars.update(this.boost, audioAverage);
+        this.tunnel.update(this.boost, );
+        this.neon.update(this.boost, audioAverage);
+        this.dust.update(this.boost, );
+        this.door.update(this.boost, audioAverage);
     }
 }
 

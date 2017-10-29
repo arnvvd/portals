@@ -14,21 +14,28 @@ class PortalsController {
 
 
     addPortal() {
-        let portal = new Portal();
+        let portal = new Portal(gameManager.boostReady);
+        if (gameManager.boostReady) {
+            gameManager.boostReady = false;
+        }
         this.portals.push(portal);
-        gameManager.createPortal();
     }
 
 
     removePortal() {
         this.portals = this.portals.slice(1, this.portals.length);
-        //console.log(Scene.scene.children)
+        console.log(Scene.scene.children)
     }
 
 
     update(time, intersectBox) {
+
+        // Calc Scale with GameManager
+        let scale = 1 - gameManager.level / 10;
+
+        // Update each portals
         this.portals.forEach((portal) => {
-            portal.update(time, intersectBox);
+            portal.update(time, intersectBox, scale);
 
             if (!portal.isVisible) {
                 Scene.remove(portal.sphere);
