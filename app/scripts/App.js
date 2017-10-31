@@ -1,12 +1,14 @@
 import {TweenMax} from 'gsap'
 import Stats from 'stats-js'
+import MobileDetect from 'mobile-detect'
 
 /* IMPORT ASSETS */
 import audio from '../assets/sound/kav.mp3'
 
 /* IMPORT CLASSES */
 import Scene from './scene/scene'
-import {Ui} from './ui/ui'
+import { Ui } from './ui/ui'
+import { gameManager } from './utils/gameManager';
 
 import AudioController from './controllers/audioController'
 import PortalsController from './controllers/portalsController';
@@ -18,15 +20,20 @@ import Cursor from './shapes/cursor';
 class App {
 
     constructor() {
+
+        // TIME
         this.DELTA_TIME = 0;
         this.LAST_TIME = Date.now();
 
+        // SIZE
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
+        // ROOT
         this.root = document.body.querySelector( '.experiment' );
         this.root.appendChild( Scene.renderer.domElement );
 
+        // MOUSE & CAMERA
         this.mouse = new THREE.Vector2(0, 0);
         this.direction_mouse = new THREE.Vector3(0, 0, 0);
         this.cameraPosition_mouse = new THREE.Vector3(0, 0, 0);
@@ -34,21 +41,34 @@ class App {
         this.cameraVelocity = 0.02;
         this.cameraDirection = -1; // -1 = follow mouse, 1 = reverse mouse
 
+        // STATS
         this.stats = new Stats();
         this.stats.setMode(0); // 0: fps, 1: ms
-
         // Align top-left
         this.stats.domElement.style.position = 'absolute';
         this.stats.domElement.style.left = '0px';
         this.stats.domElement.style.top = '0px';
-
         document.body.appendChild( this.stats.domElement );
 
+        // IS MOBILE
+        let md = new MobileDetect(window.navigator.userAgent);
+        if (md.mobile()) {
+            this.isMobile = true;
+        } else {
+            this.isMobile = false;
+        }
+
+        // EXEC
         this.init();
         this.bindUI();
-        this.initAudio();
+        // IF is mobile show UI and particles but dont load audio
+        if (!this.isMobile) {
+            this.initAudio();
+        }
+
         this.bindEvents();
     }
+
 
     /**
      * init
@@ -57,7 +77,14 @@ class App {
         this.cursor = new Cursor(this.mouse);
         this.tunnelController = new TunnelController();
         this.portalsController = new PortalsController();
+
+        if (this.isMobile) {
+            Ui.showWarning();
+        } else {
+            Ui.showLoader();
+        }
     }
+
 
     /**
      * UI
@@ -66,6 +93,7 @@ class App {
         this.ui = {};
         this.ui.startBtn = document.querySelector('.btn--start');
     }
+
 
     /**
      * initAudio
@@ -78,12 +106,6 @@ class App {
                 averageThresold: 252,
                 timeThresold: 250,
                 isPlaying: false
-            },
-            snareParams: {
-                timestamp: 0,
-                averageThresold: 115,
-                timeThresold: 100,
-                isPlaying: false
             }
         })
     }
@@ -93,19 +115,24 @@ class App {
      * bindEvents
      */
     bindEvents() {
-
+        // RESIZE
         window.addEventListener( 'resize', this.onResize.bind(this) );
+
+        //MOUSEMOVE
         window.addEventListener( 'mousemove', (e) => {
             e.preventDefault();
-            this.mouse.x = (event.clientX / this.width) * 2 - 1;
-            this.mouse.y = -(event.clientY / this.height) * 2 + 1;
+            this.mouse.x = (e.clientX / this.width) * 2 - 1;
+            this.mouse.y = -(e.clientY / this.height) * 2 + 1;
         });
 
+        // MOUSE CLICK
         this.ui.startBtn.addEventListener('click', () => {
             this.audioManager.play();
+            gameManager.gameIsStarted = true;
             Ui.hideIntroduction();
         });
 
+        // RAF
         TweenMax.ticker.addEventListener( 'tick', this.update.bind(this) )
     }
 
@@ -115,14 +142,21 @@ class App {
      * - Triggered on every TweenMax tick
      */
     update() {
+
+        if (this.stats) {
+            // START STATS
+            this.stats.begin();
+        }
+
+        // TIME
         this.DELTA_TIME = Date.now() - this.LAST_TIME;
         this.LAST_TIME = Date.now();
 
-        // START STATS
-        this.stats.begin();
 
         // AUDIO MANAGER
-        if (this.audioManager.canUpdate) {
+        let defaultAverage = 0;
+
+        if (this.audioManager && this.audioManager.canUpdate) {
 
             // Update
             this.audioManager.update();
@@ -133,18 +167,11 @@ class App {
                 this.audioManager.kickParams,
                 () => {
                     this.portalsController.addPortal();
-                    //console.log("boom");
                 }
             );
 
-            // On Snare
-            this.getAudioEvent(
-                this.audioManager.snareAverage,
-                this.audioManager.snareParams,
-                () => {
-
-                }
-            );
+            // Default average
+            defaultAverage = this.audioManager.defaultAverage;
         }
 
 
@@ -152,11 +179,16 @@ class App {
         this.cursor.update(this.mouse, this.DELTA_TIME);
         let cursorBox = this.cursor.cursorBBox;
 
+
         // TUNNEL CONTROLLER
-        this.tunnelController.update(this.audioManager.defaultAverage);
+        this.tunnelController.update(defaultAverage);
+
 
         // PORTALS CONTROLLER
-        this.portalsController.update(this.DELTA_TIME, cursorBox);
+        if (gameManager.gameIsStarted) {
+            this.portalsController.update(this.DELTA_TIME, cursorBox);
+        }
+
 
         // CAMERA
         this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse);
@@ -166,13 +198,22 @@ class App {
         Scene.camera.position.y = - this.cameraPosition_mouse.y * this.cameraDirection * this.cameraAmplitude;
         Scene.camera.lookAt(new THREE.Vector3(0,0,0));
 
+
         // RENDER
         Scene.render();
 
-        // END STATS
-        this.stats.end();
+
+        if (this.stats) {
+            // END STATS
+            this.stats.end();
+        }
+
     }
 
+
+    /**
+    * GetAudioEvent
+    **/
 
     getAudioEvent(average, params, callback) {
 
@@ -207,7 +248,6 @@ class App {
         Scene.camera.updateProjectionMatrix();
         Scene.renderer.setSize( window.innerWidth, window.innerHeight );
     }
-
 
 }
 

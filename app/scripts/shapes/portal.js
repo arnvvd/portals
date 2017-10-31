@@ -15,7 +15,6 @@ class Portal {
         this.particlesLength = 1000;
         this.isVisible = true;
         this.isTouched = false;
-        this.particleArr = [];
         this.currentTime = 0;
         this.boost = boost;
 
@@ -50,6 +49,7 @@ class Portal {
         this.sphere.position.z = 250;
 
 
+
         // PARTICLE TORI
         this.toriGeometry = new THREE.Geometry();
 
@@ -65,7 +65,6 @@ class Portal {
             particle.z = 1 * Math.sin(this.alpha) / 5;
 
             this.toriGeometry.vertices.push( particle );
-            this.particleArr.push( particle );
         }
 
         // TORI MATERIAL
@@ -93,8 +92,10 @@ class Portal {
         this.tori.position.copy(this.sphere.position);
 
 
+
         // BOX
         this.portalBBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+
 
 
         // ADD TO SCENE
@@ -120,15 +121,21 @@ class Portal {
         this.sphere.scale.x = scale;
         this.sphere.scale.y = scale;
         this.sphere.scale.z = scale;
-        this.toriMaterial.uniforms.u_amplitude.value = scale;
+
+        // IS ALREADY INTERSECTED
+        if( this.isTouched ) {
+            this.toriMaterial.uniforms.u_amplitude.value = 1.2 * scale;
+            this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0xa3fffc);
+        } else {
+            this.toriMaterial.uniforms.u_amplitude.value = scale;
+        }
+
 
         // IF INTERSECTED
         if (this.portalBBox.intersectsBox(intersectBox) && !this.isTouched) {
 
             // UPDATE STATUS
             this.isTouched = true;
-            this.toriMaterial.uniforms.u_amplitude.value = 1.2 * scale;
-            this.toriMaterial.uniforms.diffuse.value = new THREE.Color(0xa3fffc);
 
             // ADD POINT
             gameManager.touchPortal(this.boost);
@@ -136,6 +143,7 @@ class Portal {
             // UPDATE COLOR
             colorManager.changeCurrentColor();
         }
+
 
         // REMOVE PORTAL
         if (this.sphere.position.z > 300){

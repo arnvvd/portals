@@ -2,6 +2,7 @@ class GameManager {
 
     constructor(){
         // Main Infos
+        this.gameIsStarted = false;
         this.score = 0;
         this.lastScore = null;
         this.level = 0;
@@ -18,6 +19,7 @@ class GameManager {
         // Debug
         this.debugActive = false;
 
+
         this.bindUI();
     }
 
@@ -27,6 +29,11 @@ class GameManager {
         this.ui.boost = document.querySelector('.boost-data');
         this.ui.level = document.querySelector('.level-data');
         this.ui.crossed = document.querySelector('.crossed-data');
+
+        this.ui.recapScore = document.querySelector('.recap--score');
+        this.ui.recapLevel = document.querySelector('.recap--level');
+        this.ui.recapCrossed = document.querySelector('.recap--crossed');
+        this.ui.recapMissed = document.querySelector('.recap--missed');
     }
 
     touchPortal(boost) {
@@ -115,6 +122,15 @@ class GameManager {
         this.ui.boost.innerHTML = 20 - this.portalsSequence >= 0 ? 20 - this.portalsSequence : 0;
         this.ui.crossed.innerHTML = this.portalsTouched;
         this.ui.level.innerHTML = this.level;
+    }
+
+
+
+    recapScore(){
+        this.ui.recapScore.innerHTML = this.score;
+        this.ui.recapLevel.innerHTML = this.level;
+        this.ui.recapCrossed.innerHTML = this.portalsTouched;
+        this.ui.recapMissed.innerHTML = this.portalsMissed;
     }
 
 

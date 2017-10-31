@@ -56,6 +56,12 @@ a {
     padding: 4rem;
 }
 
+@media screen and (max-width: 640px) {
+  .wrapper {
+    padding: 2rem 2rem 4rem;
+  }
+}
+
 .wrapper--inner {
     display: table-cell;
     vertical-align: bottom;
@@ -88,6 +94,7 @@ a {
     font-size: 12px;
     opacity: 0;
     transition: background-color .6s cubic-bezier(.4,0,0,1);
+    pointer-events: none;
 }
 
 .btn--start:hover{
@@ -107,6 +114,14 @@ a {
     -ms-animation: blink 1.2s step-end infinite;
     -o-animation: blink 1.2s step-end infinite;
     animation: blink 1.2s step-end infinite;
+}
+
+
+.warning {
+    display: none;
+    font-size: 12px;
+    padding: 1rem 0;
+    color: #c70f5f;
 }
 
 
@@ -153,6 +168,10 @@ a {
     transition-delay: 0.4s;
 }
 
+.warning.is-active{
+    display: inline-block;
+}
+
 /* LOADING */
 .loading.is-active {
     display: inline-block;
@@ -161,6 +180,7 @@ a {
 .btn--start.is-active {
     opacity: 1;
     transition: opacity .6s cubic-bezier(.4,0,0,1);
+    pointer-events: auto;
 }
 
 /* SCORE */

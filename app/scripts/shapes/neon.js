@@ -18,10 +18,13 @@ class Neon {
     }
 
     createNeonGroup() {
+
+        // NEON
         let geometry = new THREE.BoxBufferGeometry( .8, .02, .02 );
         let material = new THREE.MeshBasicMaterial({
             color: new THREE.Color('#efd233'),
-            transparent: true
+            transparent: true,
+            opacity: 0
         });
 
         // Top Right
@@ -90,7 +93,6 @@ class Neon {
         let opacityValue = opacity/ 120;
         this.neonShapesArr.forEach((neon) => {
             neon.material.opacity = opacityValue;
-            //console.log(neon.material.opacity);
         })
     }
 
@@ -106,7 +108,6 @@ class Neon {
             this.neonGroupArr[i].position.z += velocity;
 
             if (this.neonGroupArr[i].position.z > 300){
-                //this.setPosition(this.neonGroupArr[i]);
                 this.neonGroupArr[i].position.z = 200
             }
         }

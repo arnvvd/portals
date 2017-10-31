@@ -26,13 +26,22 @@ class TunnelController {
     }
 
     update(audioAverage) {
+        // Check Boost
         this.boost = gameManager.boost;
-        // LINES
+        // Dust
+        this.dust.update(this.boost);
+        // Tunnel
+        this.tunnel.update(this.boost);
+
+        // Lines
         this.stars.update(this.boost, audioAverage);
-        this.tunnel.update(this.boost, );
-        this.neon.update(this.boost, audioAverage);
-        this.dust.update(this.boost, );
-        this.door.update(this.boost, audioAverage);
+
+        if (gameManager.gameIsStarted) {
+            // Chevron
+            this.neon.update(this.boost, audioAverage);
+            // Doors
+            this.door.update(this.boost, audioAverage);
+        }
     }
 }
 

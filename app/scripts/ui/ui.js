@@ -12,6 +12,7 @@ class UI {
         this.ui = {};
         /* Introduction*/
         this.ui.introduction = document.querySelector('.introduction');
+        this.ui.warning = document.querySelector('.warning');
         this.ui.loading = document.querySelector('.loading');
         this.ui.startBtn = document.querySelector('.btn--start');
 
@@ -28,9 +29,17 @@ class UI {
     showIntroduction() {
         this.ui.introduction.classList.add('is-active');
         this.ui.footer.classList.add('is-active');
+    }
+
+    showLoader() {
         window.setTimeout(() => {
             this.ui.loading.classList.add('is-active')
         }, 600)
+    }
+
+    showWarning() {
+        console.log('mobile');
+        this.ui.warning.classList.add('is-active');
     }
 
     hideIntroduction() {

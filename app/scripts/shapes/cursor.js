@@ -1,4 +1,3 @@
-import { colorManager } from '../utils/colorManager'
 import Easing from '../utils/easing'
 import Scene from '../scene/scene'
 
@@ -18,9 +17,7 @@ class Cursor {
         this.sphereCursorRadius = .08;
         this.positionZ = 290;
         this.particlesLength = 500;
-        this.particleArr = [];
         this.currentTime = 0;
-        this.color = new THREE.Color(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
         this.render();
     }
 
@@ -58,7 +55,6 @@ class Cursor {
 
             let particle = new THREE.Vector3();
 
-
             this.alpha = Math.random() * (Math.PI);
             this.theta = Math.random() * (Math.PI * 2);
 
@@ -67,8 +63,8 @@ class Cursor {
             particle.z = this.sphereParticleradius2 * Math.cos(this.theta);
 
             this.sphereGeometry.vertices.push( particle );
-            this.particleArr.push( particle );
         }
+
 
         // SPHERE MATERIAL
         this.sphereMaterial = new THREE.ShaderMaterial( {
@@ -118,7 +114,6 @@ class Cursor {
         let distance = - (Scene.camera.position.z - this.positionZ) / dir.z;
         let pos = Scene.camera.position.clone().add( dir.multiplyScalar( distance ) );
 
-
         // EASING FOLLOW MOUSE
         this.cursor.position.z = this.positionZ;
         this.cursor.position.x = Easing['easeOutCubic']( currentTime, this.cursor.position.x, pos.x - this.cursor.position.x, 300 );
@@ -140,9 +135,6 @@ class Cursor {
         this.currentTime += currentTime / 500;
         this.sphereMaterial.uniforms.u_time.value = this.currentTime;
 
-        // UPDATE BOX
-        //this.box.update();
-
         // UPDATE SPHERE CURSOR
         this.particleCursor.position.copy(this.cursor.position);
 
@@ -151,9 +143,6 @@ class Cursor {
 
         // UPDATE CURSOR
         this.updateCursorPosition(mouse, currentTime);
-
-        // UPDATE COLOR
-        this.color.setRGB(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
     }
 }
 

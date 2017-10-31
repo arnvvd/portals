@@ -2,6 +2,7 @@ import Scene from '../scene/scene'
 import texture from '../../assets/textures/texture2.jpg'
 
 class Tunnel {
+
     constructor() {
         this.init();
     }

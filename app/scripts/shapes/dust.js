@@ -10,7 +10,7 @@ class Dust {
         this.number = 120;
         this.radius = 5;
         this.color = new THREE.Color('#FFFFFF');
-        this.lines = [];
+        this.dustParticles = [];
         this.render();
     }
 
@@ -22,9 +22,9 @@ class Dust {
         });
 
         for (let i = 0 ; i < this.number; i++) {
-            this.lines[i] = new THREE.Mesh( geometry, material );
-            this.setPosition(this.lines[i], i);
-            Scene.scene.add(this.lines[i])
+            this.dustParticles[i] = new THREE.Mesh( geometry, material );
+            this.setPosition(this.dustParticles[i]);
+            Scene.scene.add(this.dustParticles[i])
         }
     }
 
@@ -45,11 +45,11 @@ class Dust {
             velocity = velocity * 1.5;
         }
 
-        for(let i = 0 ; i < this.lines.length; i++){
-            this.lines[i].position.z += velocity;
+        for(let i = 0 ; i < this.dustParticles.length; i++){
+            this.dustParticles[i].position.z += velocity;
 
-            if (this.lines[i].position.z > 300){
-                this.lines[i].position.z = 200
+            if (this.dustParticles[i].position.z > 300){
+                this.dustParticles[i].position.z = 200
             }
         }
     }

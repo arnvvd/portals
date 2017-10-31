@@ -10,7 +10,7 @@ class Stars {
         this.number = 100;
         this.radius = 5;
         this.color = new THREE.Color(`rgb(${colorManager.currentColor.color[0][0]}, ${colorManager.currentColor.color[0][1]}, ${colorManager.currentColor.color[0][2]})`);
-        this.lines = [];
+        this.stars = [];
         this.render();
     }
 
@@ -23,28 +23,26 @@ class Stars {
         });
 
         for (let i = 0 ; i < this.number; i++) {
-            this.lines[i] = new THREE.Mesh( geometry, material );
-            this.setPosition(this.lines[i], i);
-            Scene.scene.add(this.lines[i])
+            this.stars[i] = new THREE.Mesh( geometry, material );
+            this.setPosition(this.stars[i], i);
+            Scene.scene.add(this.stars[i])
         }
     }
 
-    setPosition(line) {
+    setPosition(star) {
         let positionZ = Math.floor(Math.random() * 200) + 1;
         let multiplicateur = Math.floor(Math.random() * 2) === 0 ? -1 : 1;
         positionZ = positionZ * multiplicateur;
-        line.position.x = Math.cos(((Math.PI * 2) / this.number) * line.id ) * this.radius * multiplicateur;
-        line.position.y = Math.sin(((Math.PI * 2) / this.number) * line.id ) * this.radius * multiplicateur;
-        line.position.z = positionZ;
+        star.position.x = Math.cos(((Math.PI * 2) / this.number) * star.id ) * this.radius * multiplicateur;
+        star.position.y = Math.sin(((Math.PI * 2) / this.number) * star.id ) * this.radius * multiplicateur;
+        star.position.z = positionZ;
     }
 
 
     updateLight(opacity) {
         let opacityValue = opacity/ 120;
-        this.lines.forEach((line) => {
-            line.material.opacity = opacityValue;
-            //console.log(neon.material.opacity);
-
+        this.stars.forEach((star) => {
+            star.material.opacity = opacityValue;
         })
     }
 
@@ -58,13 +56,13 @@ class Stars {
             velocity = velocity * 1.5;
         }
 
-        for(let i = 0 ; i < this.lines.length; i++){
-            this.lines[i].position.z += velocity;
-            this.lines[i].material.color = this.color;
-            this.lines[i].material.emissive = this.color;
+        for(let i = 0 ; i < this.stars.length; i++){
+            this.stars[i].position.z += velocity;
+            this.stars[i].material.color = this.color;
+            this.stars[i].material.emissive = this.color;
 
-            if (this.lines[i].position.z > 300){
-                this.lines[i].position.z = 200
+            if (this.stars[i].position.z > 300){
+                this.stars[i].position.z = 200
             }
         }
 

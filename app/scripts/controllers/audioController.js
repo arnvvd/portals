@@ -1,5 +1,6 @@
 import ArrayUtils from '../utils/array-utils'
 import {Ui} from '../ui/ui'
+import { gameManager } from '../utils/gameManager';
 
 export default class AudioManager {
 
@@ -124,9 +125,11 @@ export default class AudioManager {
         this.audioSource.start();
     }
 
+
     bindEvent() {
         this.audioSource.onended = () => {
             Ui.hideScore();
+            gameManager.recapScore();
         };
     }
 
@@ -135,6 +138,7 @@ export default class AudioManager {
         analyser.getByteFrequencyData(frequencyData);
         return ArrayUtils.average(frequencyData);
     }
+
 
     getFrequencyValue(analyser, frequencyData, frequencyItem) {
         analyser.getByteFrequencyData(frequencyData);
